@@ -1,0 +1,12 @@
+name = "vtuber-music"
+main = "src/index.ts"
+node_compat = true
+compatibility_date = "2023-03-26"
+
+[triggers]
+crons = [ "1 * * * *" ]
+
+[[ d1_databases ]]
+binding = "DB" # i.e. available in your Worker on env.DB
+database_name = "MUSIC_DB"
+database_id = "8fd17ac1-4776-446e-989b-8017b25d007a"
