@@ -1,6 +1,5 @@
 name = "vtuber-music"
 main = "src/index.ts"
-node_compat = true
 compatibility_date = "2023-03-26"
 
 [triggers]
