@@ -9,3 +9,7 @@ crons = [ "1/10 * * * *", "6/10 * * * *" ]
 binding = "DB" # i.e. available in your Worker on env.DB
 database_name = "MUSIC_DB"
 database_id = "8fd17ac1-4776-446e-989b-8017b25d007a"
+
+# Secrets
+# DISCORD_WEBHOOK_URL
+# HOLODEX_API_KEY
