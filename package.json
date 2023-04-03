@@ -12,6 +12,6 @@
     "deploy": "wrangler publish"
   },
   "dependencies": {
-    "discord-webhook-node-data": "^1.1.9"
+    "minimal-discord-webhook-node": "^1.0.0"
   }
 }

@@ -19,7 +19,7 @@ const getMusic = async (holodexApiKey: string, org: "Hololive" | "Nijisanji"): P
                 'Content-Type': 'application/json',
                 'X-APIKEY': holodexApiKey
             }, body: JSON.stringify({
-                "sort": "oldest",
+                "sort": "newest",
                 "lang": [
                   "en",
                   "ja"
@@ -34,13 +34,13 @@ const getMusic = async (holodexApiKey: string, org: "Hololive" | "Nijisanji"): P
                 "comment": [],
                 "paginated": true,
                 "offset": 0,
-                "limit": 30
+                "limit": 5
               })
         });
         const json = (await response.json()) as any;
         const results = json.items;
         return results.filter((result: any) => result.status === "past")
-                    .map((result: any) => new Entry(result.id, result.channel.english_name, result.title, convertType(result.topic_id)));
+                    .map((result: any) => new Entry(result.id, result.channel.english_name, result.title, convertType(result.topic_id), result.channel.photo));
     } catch (error) {
         console.error(error);
         return [];

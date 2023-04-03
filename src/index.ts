@@ -10,8 +10,8 @@
  * Learn more at https://developers.cloudflare.com/workers/runtime-apis/scheduled-event/
  */
 
-import { Webhook } from "discord-webhook-node-data";
-import { diffNewEntries, saveNewEntries } from "./db";
+import { Webhook } from "minimal-discord-webhook-node";
+import { diffNewEntries, Entry, saveNewEntries } from "./db";
 import { getMusic } from "./holodex";
 import { sendWebhook } from "./webhook";
 
@@ -35,13 +35,23 @@ export default {
 		env: Env,
 		ctx: ExecutionContext
 	): Promise<void> {
-		const [hololive, nijisanji] = await Promise.all([getMusic(env.HOLODEX_API_KEY, "Hololive"), getMusic(env.HOLODEX_API_KEY, "Nijisanji")]);
-		const entries = hololive.concat(nijisanji);
+		let entries: Entry[] = [];
+		switch (controller.cron) {
+			case "1/10 * * * *":
+				entries = await getMusic(env.HOLODEX_API_KEY, "Hololive");
+				break;
+			case "6/10 * * * *":
+				entries = await getMusic(env.HOLODEX_API_KEY, "Nijisanji");
+				break;
+			default:
+				return;
+		}
 		const newEntries = await diffNewEntries(env.DB, entries);
 		const client = new Webhook(env.DISCORD_WEBHOOK_URL);
 		newEntries.forEach(entry => {
 			sendWebhook(client, entry);
 		});
+		console.log(newEntries.length);
 		await saveNewEntries(env.DB, newEntries);
 	},
 };
