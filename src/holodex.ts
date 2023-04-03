@@ -11,6 +11,11 @@ const convertType = (currentType: string): "Cover" | "Original" => {
     }
 }
 
+const getName = (response: any): string => {
+    const channel = response.channel;
+    return 'english_name' in channel ? channel.english_name : channel.name;
+}
+
 const getMusic = async (holodexApiKey: string, org: "Hololive" | "Nijisanji"): Promise<Entry[]> => {
     try {
         const response = await fetch("https://holodex.net/api/v2/search/videoSearch", {
@@ -40,7 +45,7 @@ const getMusic = async (holodexApiKey: string, org: "Hololive" | "Nijisanji"): P
         const json = (await response.json()) as any;
         const results = json.items;
         return results.filter((result: any) => result.status === "past")
-                    .map((result: any) => new Entry(result.id, result.channel.english_name, result.title, convertType(result.topic_id), result.channel.photo));
+                    .map((result: any) => new Entry(result.id, getName(result) , result.title, convertType(result.topic_id), result.channel.photo));
     } catch (error) {
         console.error(error);
         return [];
